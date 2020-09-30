@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+void insert(int d);
+void display();
+
+
+struct Node
+{
+	int data; 
+	Node *next;
+};
+
+struct Node* head = NULL;
+struct Node* tail = NULL;
+int main()
+{
+	int n;
+	cout << "We are creating a linked list with 3 nodes."<<endl;
+	for (int i = 1; i <=3 ; i++)
+	{
+		cout << "Insert Node "<<i<< " into linked list." << endl;
+		cin >> n;
+		insert(n);
+	}
+	cout << "Linked list: ";
+	display();
+    return 0;
+}
+
+void insert(int new_data) {
+	struct Node* new_node = new Node;
+	new_node->data = new_data;
+	if (head==NULL){
+	    new_node->next = head;
+	    head = new_node;
+	    tail=head;
+	}
+	else if (head->next == NULL){
+	    head->next = new_node;
+	    tail = head->next;
+	 }
+	 else{
+	    //struct Node* temp;
+	    tail->next = new_node;
+	    tail=new_node;
+	 }
+}
+void display() {
+	struct Node* ptr;
+	ptr = head;
+	while (ptr != NULL) {
+		cout << ptr->data << " ";
+		ptr = ptr->next;
+	}
+}
