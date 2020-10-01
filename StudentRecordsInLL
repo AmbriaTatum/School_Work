@@ -1,0 +1,234 @@
+#include <iostream>
+#include <fstream>
+#include<string>
+#include <iomanip>
+
+using namespace std;
+
+struct studentRecord
+{
+	string fName;
+	string lName;
+	int ssn;
+	string studentID;
+	int NoC;
+	string major;
+	studentRecord* next;
+}student;
+studentRecord* Head = NULL;
+studentRecord* Tail = NULL;
+void getList();
+void displayList();
+void deleteStudent();
+void sortBySSN();
+int main()
+{
+
+	getList();
+	displayList();
+	deleteStudent();
+	displayList();
+	sortBySSN();
+	system("pause");
+	return 0;
+}
+
+void getList()
+{
+	bool eof = false;
+	fstream aList;
+	aList.open("students.txt", ios::in);
+
+	while (!eof)
+	{
+		if (aList.eof()) {
+			eof = true;
+		}
+		else
+		{
+			studentRecord* temp = new studentRecord;
+			studentRecord* prev = NULL;
+			if (Head == NULL)
+			{
+				aList >> temp->fName >> temp->lName >> temp->ssn >> temp->studentID >> temp->NoC >> temp->major;
+				Head = temp;
+				Tail = temp;
+				Head->next = NULL;
+			}
+			else if (Head->next == NULL)
+			{
+				aList >> temp->fName >> temp->lName >> temp->ssn >> temp->studentID >> temp->NoC >> temp->major;
+				Head->next = temp;
+				Tail = temp;
+				temp->next = NULL;
+			}
+			else {
+				aList >> temp->fName >> temp->lName >> temp->ssn >> temp->studentID >> temp->NoC >> temp->major;
+				prev = Tail;
+				prev->next = temp;
+				Tail = temp;
+				temp->next = NULL;
+			}
+		}
+	}
+	aList.close();
+}
+void addStudent()
+{
+	studentRecord* temp = new studentRecord;
+	studentRecord* prev = NULL;
+	cout << "Enter first name." << endl;
+	cin >> temp->fName;
+	cout << "Enter last name." << endl;
+	cin >> temp->lName;
+	cout << "Enter social security number." << endl;
+	cin >> temp->ssn;
+	cout << "Enter student ID." << endl;
+	cin >> temp->studentID;
+	cout << "Enter number of courses currently being taken." << endl;
+	cin >> temp->NoC;
+	cout << "Enter major." << endl;
+	cin >> temp->major;
+	prev = Tail;
+	prev->next = temp;
+	Tail = temp;
+	temp->next = NULL;
+}
+
+void deleteStudent()
+{
+	string Name;
+	int SSN;
+	cout << "Enter first name and social security number of student to be deleted: " << endl;
+	cin >> Name >> SSN;
+	studentRecord* curr = Head;
+	bool del = false;
+	while (curr != NULL && del != true)
+	{
+		if (Name == Head->fName && SSN == Head->ssn)
+		{
+			Head = curr->next;
+			delete curr;
+			del = true;
+			break;
+		}
+		else if (Name == curr->next->fName && SSN == curr->next->ssn)
+		{
+			studentRecord* temp = curr->next;
+			if (temp->next != NULL) {
+				curr->next = temp->next;
+			}
+
+			delete temp;
+			del = true;
+			break;
+
+		}
+		else
+		{
+			cout << "Record not found." << endl;
+			break;
+		}
+
+		curr = curr->next;
+	}
+
+}
+/*
+void sortByName()
+{
+	string Name;
+	int SSN;
+	cout << "Sorted by name: " << endl;
+	studentRecord* curr = Head;
+	bool del = false;
+	while (curr != NULL && del == false)
+	{
+		if (Name == Head->fName && SSN == Head->ssn)
+		{
+			Head = curr->next;
+			delete curr;
+			del = true;
+			break;
+		}
+		else if (Name == curr->next->fName && SSN == curr->next->ssn)
+		{
+			studentRecord* temp = curr->next;
+			if (temp->next != NULL) {
+				curr->next = temp->next;
+			}
+
+			delete temp;
+			del = true;
+			break;
+
+		}
+		curr = curr->next;
+
+}
+*/
+void sortBySSN()
+{
+	cout << "Sorted by SSN: " << endl;
+
+
+	bool sorted = false;
+	studentRecord *curr = Head, *prev=Head;
+	while (sorted != true)
+	{
+		cout << "Sorted !=true" << endl;
+		if (Head == NULL)
+		{
+			cout << "List is empty. " << endl;
+			sorted = true;
+			break;
+		}
+		studentRecord* temp = curr;
+		while (temp->ssn > curr->next->ssn && curr != NULL)
+		{
+			cout << "Curr>Curr->next" << endl;
+			curr = curr->next;
+			if (curr->next->ssn > temp->ssn)
+			{
+				cout << "if curr->next > temp" << endl;
+				temp->next = curr->next;
+				curr->next = temp;
+			}
+			else if (curr->next->ssn < temp->ssn)
+			{
+				cout << "if curr->next < temp" << endl;
+				curr = curr->next;
+			}
+			else
+			{
+				cout << "List is sorted. " << endl;
+				sorted = true;
+				break;
+			}
+		}
+	}
+
+	studentRecord* ptr = Head;
+	while (ptr != NULL) {
+		//cout << ptr->fName << " " << ptr->lName << " " << ptr->ssn << " " << ptr->studentID << " " << ptr->NoC << " " << ptr->major << " -> "<<endl;
+		cout << ptr->ssn << endl;
+		ptr = ptr->next;
+	}
+	cout << "NULL" << endl;
+}
+
+void displayList()
+{
+	studentRecord* aptr;
+	aptr = Head;
+	cout << "head-> ";
+	int i = 1;
+	while (aptr != NULL)
+	{
+		//cout << i << " " << aptr->fName << " " << aptr->lName << " " << aptr->ssn << " " << aptr->studentID << " " << aptr->NoC << " " << aptr->major << " -> ";
+		cout << aptr->ssn << endl;
+		aptr = aptr->next;
+		i++;
+	}
+	cout << "NULL" << endl;
+}
