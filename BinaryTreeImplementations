@@ -1,0 +1,142 @@
+#include <iostream>
+
+using namespace std;
+
+void Preorder(struct node* Node);
+void Inorder(struct node* Node);
+void Postorder(struct node* Node);
+
+struct node {
+	int data;
+	node* left;
+	node* right;
+}root;
+
+node* createNewNode(int x)
+{
+	node* nn = new node;
+	nn->data = x;
+	nn->left = nullptr;
+	nn->right = nullptr;
+
+	return nn;
+}
+
+void Insert(node*& root, int x)
+{
+	if (root == nullptr) {
+		root = createNewNode(x);
+		return;
+	}
+
+	if (x < root->data)
+	{
+		if (root->left == nullptr) {
+			root->left = createNewNode(x);
+			return;
+		}
+		else {
+			Insert(root->left, x);
+		}
+	}
+
+	if (x > root->data)
+	{
+		if (root->right == nullptr) {
+			root->right = createNewNode(x);
+			return;
+		}
+		else {
+			Insert(root->right, x);
+		}
+	}
+}
+
+int main()
+{
+	node* root = nullptr;
+	/*BST we want:
+		
+                                          21
+
+                    11                                           26
+
+ 
+
+	     6                   19                        23                   29
+
+						
+
+     4       9              15     20             22     24
+	 */
+		Insert(root, 21);
+		Insert(root, 11);
+		Insert(root, 26);
+		Insert(root, 6);
+		Insert(root, 19);
+		Insert(root, 4);
+		Insert(root, 9);
+		Insert(root, 15);
+		Insert(root, 20);
+		Insert(root, 23);
+		Insert(root, 29);
+		Insert(root, 22);
+		Insert(root, 24);
+		
+		cout << "Preorder: ";  Preorder(root);
+		cout << endl;
+		cout << "Inorder: ";  Inorder(root);
+		cout << endl;
+		cout << "Postorder: "; Postorder(root);
+		cout << endl;
+
+	return 0;
+}
+
+//preorder
+void Preorder(struct node* Node)
+{
+	if (Node == NULL)
+		return;
+
+	/* first print data of node */
+	cout << Node->data << " ";
+
+	/* then recur on left sutree */
+	Preorder(Node->left);
+
+	/* now recur on right subtree */
+	Preorder(Node->right);
+}
+
+//inorder
+void Inorder(struct node* Node)
+{
+	if (Node == NULL)
+		return;
+
+	/* first recur on left child */
+	Inorder(Node->left);
+
+	/* then print the data of node */
+	cout << Node->data << " ";
+
+	/* now recur on right child */
+	Inorder(Node->right);
+}
+
+//post order
+void Postorder(struct node* Node)
+{
+			 if (Node == NULL)
+				 return;
+
+			 // first recur on left subtree 
+			 Postorder(Node->left);
+
+			 // then recur on right subtree 
+			 Postorder(Node->right);
+
+			 // now deal with the node 
+			 cout << Node->data << " ";
+ }
